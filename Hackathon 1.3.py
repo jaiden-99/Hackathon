@@ -1,0 +1,521 @@
+# Proof of Concept 1.2
+
+import pygame
+import random
+pygame.init()
+
+background = pygame.image.load("Shooty Game Background.png")
+p1 = pygame.image.load("Player 1.png")
+e1 = pygame.image.load("Boss 1.png")
+
+xval = 1200
+yval = 700
+SIZE = (1200, 700)
+ammo = 3
+
+x1 = 150
+xb1a = x1
+x2 = 950
+xb2a = x2
+y = 500
+yb1a = y
+y2 = 500
+yb2a = y2
+
+xb1b = x1
+yb1b = y
+xb1c = x1
+yb1c = y
+
+#win = pygame.display.set_mode ((xval,yval))
+win = pygame.display.set_mode(SIZE,pygame.FULLSCREEN)
+pygame.display.set_caption ("Simply Fighting Game 2.0")
+
+width = 40
+height = 60 
+#vel = 50
+open = True
+fire1a = False
+fire1b = False
+fire1c = False
+fire1d = False
+
+fire2a = False
+
+p1hp = int(100)
+p2hp = int(500) #default 250
+spazz = int(0)
+charge = int(0)
+
+p1hit = False
+p2hit = False
+
+#enemyhit = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #list, if value is zero then not hit but if value is one then hit
+# enemyhp = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #for the enemy, generte it's corosponding HP value
+
+Yellow = (255,255,0)
+Black = (0,0,0)
+Red = (255,0,0)
+Blue = (0,0,255)
+White = (255, 255,255)
+
+font = pygame.font.SysFont('comicsans', 30, True)
+
+run = True
+while run:
+    #win.blit (background, (0, 0))  
+    #pygame.time.delay (1)
+    
+    for event in pygame.event.get ():
+        if event.type == pygame.QUIT:
+            run = False
+     
+    keys = pygame.key.get_pressed()
+    
+    if charge <= 0:
+        charge = 0
+    
+    # Player 1 Controls
+    if keys [pygame.K_a]: 
+                x1 -= 5
+                if p1hp <= 25:
+                    x1 -= 5
+    
+    if keys [pygame.K_s]: 
+            y += 5  
+            if p1hp <= 25:
+                y += 5            
+            
+    if keys [pygame.K_w]: 
+                y -= 5  
+                if p1hp <= 25:
+                    y -= 5                
+    
+    if keys [pygame.K_d]: 
+                x1 += 5 
+                if p1hp <= 25:
+                    x1 += 5                
+    
+    if keys [pygame.K_DOWN] and ammo > 0:#fire1d == False and fire1a == False and fire1b == False and fire1c == False:
+        fire1d = True 
+        #fire1a = False
+        #fire1b = False
+        #fire1c = False        
+        #pygame.draw.circle(win, Red, (x1, y + 50), 25)
+    if keys [pygame.K_LEFT] and ammo > 0:#and fire1d == False and fire1a == False and fire1b == False and fire1c == False:
+        fire1c = True 
+        fire1a = False
+        fire1b = False
+        fire1d = False        
+        #pygame.draw.circle(win, Red, (x1 - 50, y), 25)
+    if keys [pygame.K_UP] and ammo > 0:#and fire1d == False and fire1a == False and fire1b == False and fire1c == False:
+        fire1b = True 
+        fire1a = False
+        fire1d = False
+        fire1c = False        
+        #pygame.draw.circle(win, Red, (x1, y - 50), 25)
+    if keys [pygame.K_RIGHT] and ammo > 0:#and fire1d == False and fire1a == False and fire1b == False and fire1c == False:
+        fire1a = True
+        fire1d = False
+        fire1b = False
+        fire1c = False        
+        #pygame.draw.circle(win, Red, (x1 + 50, y), 25)
+    
+    if ammo > 3:
+        ammo = 3
+    
+    if keys [pygame.K_x]:        
+        #if keys [pygame.K_DOWN]:
+            #fire1d = True 
+        #if keys [pygame.K_LEFT]:
+            #fire1c = True 
+        #if keys [pygame.K_UP]:
+            #fire1b = True 
+        if keys [pygame.K_RIGHT]:
+            fire1a = True
+        else:
+            if charge <= 100:
+                charge += 1
+            #fire1a = True 
+
+    # Alternate fire button
+    #if keys [pygame.K_x]: 
+        #fire1a = True
+        
+    # Player 2 Controls 
+    if x1 <= x2: 
+        x2 -= 1      
+        #if open == True:
+            #open = False
+      
+    if x1 >= x2: 
+        x2 += 1
+        #if open == True:
+            #open = False        
+        
+    if y <= y2:
+        y2 -= 1
+        #if open == True:
+            #open = False 
+            
+    if y >= y2:
+        y2 += 1  
+        #if open == True:
+            #open = False  
+    #if fire1a == True: 
+        #fire2a = True
+    # (de-comment ends)
+    #if p2hp <= 50:
+        #spazz = random.randint(0,4)
+        #if spazz == 1:
+            #x2 -= 1
+        #if spazz == 2:
+            #x2 += 1
+        #if spazz == 3:
+            #y2 -= 1
+        #if spazz == 4:
+            #y2 += 1
+        
+    fire2a = True
+            
+# Collision Detection    
+    if x1 <= 0:
+        x1 = 0
+         
+    if x2 <= 0:
+        x2 = 0   
+        
+    if y <= 0:
+        y = 0    
+        
+    if y2 <= 0:
+        y2 = 0        
+    
+    if x1 >= xval:
+        x1 = xval
+
+    if x2 >= xval:
+        x2 = xval   
+
+    if y >= yval:
+        y = yval    
+
+    if y2 >= yval:
+        y2 = yval
+    
+    #Damage    
+    if x1 + 25 >= xb2a and x1 - 25 <= xb2a and y + 25 >= yb2a and y - 25 <= yb2a:
+        #hp1 -= 1
+        p1hit = True
+        
+    if xb1a + 25 >= x2 and xb1a - 25 <= x2 and yb1a + 25 >= y2 and yb1a - 25 <= y2:
+        charge -= 5
+    
+    if x2 + 150 >= xb1a + 25 - charge and x2 - 150 <= xb1a - 25 + charge and y2 + 150 >= yb1a + 25 - charge and y2 - 150 <= yb1a - 25 + charge:
+        #hp1 -= 1
+        p2hit = True    
+    
+    win.fill ((0,0,0))
+    
+    #win.blit (p1, (x1, y))
+    #surf = pygame.transform.scale (p1, (50, 50))
+    #win.blit(surf, (x1 - 25, y -25))
+    
+    #pygame.draw.rect(win, (255,0,0), (x1,y,width,height))
+         
+    # Blasts and Players    
+        
+    if fire1a == True or fire1b == True or fire1c == True or fire1d == True:
+        #if fire1a == True:
+            #pygame.draw.circle(win, Red, (x1 + 50, y), 25)
+            #xb1a += 5
+            #if p1hp <= 25:
+                #xb1a += 5            
+        
+        if fire1b == True:
+            pygame.draw.circle(win, Red, (x1, y - 50), 25)
+            ammo -= 1
+            if ammo == 3:
+                yb1a -= 5 
+            if ammo == 2:
+                yb1b -= 5 
+            if ammo == 1:
+                yb1c -= 5 
+                
+            if p1hp <= 25:
+                yb1a -= 5
+                    
+        if fire1c == True:
+            ammo -= 1
+            pygame.draw.circle(win, Red, (x1 - 50, y), 25)
+            if ammo == 3:
+                xb1a -= 5
+            if ammo == 2:
+                xb1b -= 5
+            if ammo == 1:
+                xb1c -= 5
+            if p1hp <= 25:
+                xb1a -= 5            
+    
+        if fire1d == True:
+            ammo -= 1
+            pygame.draw.circle(win, Red, (x1, y + 50), 25)
+            if ammo == 3:
+                yb1a += 5
+            if ammo == 2:    
+                yb1b += 5                
+            if ammo == 3:    
+                yb1c += 5
+            if p1hp <= 25:
+                yb1a += 5
+        
+        if fire1a == True:
+            ammo -= 1
+            pygame.draw.circle(win, Red, (x1 + 50, y), 25)
+            if ammo == 3:
+                xb1a += 1
+            if ammo == 2:
+                xb1b += 1
+            if ammo == 1:
+                xb1c += 1
+            xb1a += 5
+            if p1hp <= 25:
+                xb1a += 5            
+
+            
+        #if keys [pygame.K_DOWN]:
+            #yb1a += 5
+        #if keys [pygame.K_LEFT]:
+            #xb1a -= 5
+        #if keys [pygame.K_UP]:
+            #yb1a -= 5
+        #if keys [pygame.K_RIGHT]:
+            #xb1a += 5
+    else:
+        xb1a = x1
+        yb1a = y
+
+    if fire2a == True:
+        if x2 <= x1:
+            xb2a += 5
+        if x2 >= x1:
+            xb2a -= 5            
+    else:
+        xb2a = x2
+        yb2a = y2
+        
+    if xb2a > 1200:
+        xb2a = x2
+        yb2a = y2
+        fire2a = False  
+        
+    if xb2a < 0:
+        xb2a = x2
+        yb2a = y2
+        fire2a = False    
+        
+    if xb1a == xb2a and yb1a == yb2a:
+        fire1a = False
+        fire1b = False
+        fire1c = False
+        fire1d = False  
+        
+        fire2a = False
+
+        
+    # Blasts
+    if ammo == 3:
+        pygame.draw.circle(win, Red, (xb1a, yb1a), 25 + charge)  
+    if ammo == 2:
+        pygame.draw.circle(win, Red, (xb1b, yb1b), 25 + charge)  
+    if ammo == 1:
+        pygame.draw.circle(win, Red, (xb1c, yb1c), 25 + charge)  
+    #if xb1a != x1 and yb1a != y:
+        #pygame.draw.circle(win, Red, (xb1a, yb1a), 25) 
+    if xb2a != x2:
+        pygame.draw.circle(win, Blue, (xb2a, yb2a), 25) 
+    
+    if ammo <= 0:
+        ammo = 3
+      
+    # Player 1 and 2   
+    if open == True:
+        surf = pygame.transform.scale (p1, (50, 50))
+        surf2 = pygame.transform.scale (e1, (250, 250))
+        win.blit(surf, (x1 - 25, y -25))    
+        win.blit(surf2, (x2 - 125, y2 - 125)) 
+        #surf = pygame.transform.scale (p1, (p1hp, p1hp))
+        #pygame.draw.circle(win, Blue, (x2, y2), 250)
+        #open = False           
+    else:
+        surf = pygame.transform.scale (p1, (50, 50))
+        win.blit(surf, (x1 - 25, y -25))        
+        #pygame.draw.circle(win, Red, (x1, y), p1hp)
+        #pygame.draw.circle(win, Black, (x1, y), 25)
+        pygame.draw.circle(win, Blue, (x2, y2), 150)               
+        
+    if p1hit == True:
+        p1hp -= 1
+    
+    if p2hit == True:
+        p2hp -= 1
+    
+    p1hit = False
+    p2hit = False
+            
+    # Health
+    text = font.render('Health 1: ' + str(p1hp), 1, (255,0,0))  
+    win.blit (text, (300, 10))
+    
+    text = font.render('Health 2: ' + str(p2hp), 1, (0,0,255))  
+    win.blit (text, (700, 10)) 
+    
+    #if fire1a == False and fire1b == False and fire1c == False and fire1d == False:
+        #xb1a = x1
+        #yb1a = y        
+        
+    if xb1a > 1200:
+        xb1a = x1
+        yb1a = y
+        xb1b = x1
+        yb1b = y
+        xb1c = x1
+        yb1c = y
+        
+        fire1a = False
+        fire1b = False
+        fire1c = False
+        fire1d = False  
+        charge = 0
+    
+    if xb1a < 0:
+        xb1a = x1
+        yb1a = y        
+        fire1a = False
+        fire1b = False
+        fire1c = False
+        fire1d = False  
+        charge = 0
+        
+    if yb1a > 700:
+        xb1a = x1
+        yb1a = y
+        fire1a = False
+        fire1b = False
+        fire1c = False
+        fire1d = False 
+        charge = 0
+    
+    if yb1a < 0:
+        xb1a = x1
+        yb1a = y        
+        fire1a = False
+        fire1b = False
+        fire1c = False
+        fire1d = False
+        charge = 0    
+    
+    pygame.display.update()
+    
+    if p1hp <= 0 and p2hp > 0:
+        #draw explosion at the coordinates of player 1
+        pygame.draw.circle(win, Red, (x1, y), 75)  
+        pygame.display.update()        
+        pygame.time.delay (10)  
+        pygame.draw.circle(win, Red, (x1, y), 100)
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 150) 
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 250)   
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 450)      
+        pygame.display.update()        
+        pygame.time.delay (10)          
+        text = font.render('Player 2 wins', 1, (0,0,255))  
+        win.blit (text, (525, 300))        
+        pygame.display.update()        
+        pygame.time.delay (150)               
+        break
+    
+    if p2hp <= 0 and p1hp > 0:
+        
+        #draw explosion at the coordinates of player 
+        pygame.draw.circle(win, Blue, (x2, y2), 75)        
+        pygame.display.update()        
+        pygame.time.delay (10) 
+        pygame.draw.circle(win, Blue, (x2, y2), 10)        
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 150)        
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 250)   
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 450)   
+        pygame.display.update()        
+        pygame.time.delay (10)          
+        text = font.render('Player 1 wins', 1, (255,0,0))  
+        win.blit (text, (525, 300))        
+        pygame.display.update()        
+        pygame.time.delay (150)             
+        break
+        
+    #if p2hp <= 0:
+        #run = false  
+    
+    if p2hp <= 0 and p1hp <= 0:      
+        pygame.draw.circle(win, Blue, (x2, y2), 75)        
+        pygame.display.update()        
+        pygame.time.delay (10) 
+        pygame.draw.circle(win, Blue, (x2, y2), 10)        
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 150)        
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 250)   
+        pygame.display.update()        
+        pygame.time.delay (10)     
+        pygame.draw.circle(win, Blue, (x2, y2), 450)   
+        pygame.display.update()        
+        pygame.time.delay (10) 
+        pygame.draw.circle(win, Red, (x1, y), 75)  
+        pygame.display.update()        
+        pygame.time.delay (10)  
+        pygame.draw.circle(win, Red, (x1, y), 100)
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 150) 
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 250)   
+        pygame.display.update()        
+        pygame.time.delay (10)         
+        pygame.draw.circle(win, Red, (x1, y), 450)      
+        pygame.display.update()        
+        pygame.time.delay (10)    
+        text = font.render('Tie', 1, (0,0,255))  
+        win.blit (text, (525, 300))        
+        pygame.display.update()        
+        pygame.time.delay (150)               
+        break        
+   
+   # Kill switch
+    if keys [pygame.K_SPACE]: 
+        break
+    
+    #win.fill ((0,0,0))
+
+    #win.blit (background, (0, 0))  
+
+pygame.time.delay (500)        
+pygame.quit ()
+
+# Add this Version:
+# Multiple enemies
+# Multiple shots (count from if ammo > 0 then you can keep firing so there can be ammo upgrades)
+# Stage progression in pygame
